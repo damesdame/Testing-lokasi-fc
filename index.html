@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Lokasi FC MAKA</title>
+  <title>testing</title>
   <style>
     :root{
       --bg1:#0a192f;
@@ -482,43 +482,39 @@
   <script>
     
     // =======================================
-    // DATA CHARGER
+    // DATA CHARGER (MENGGUNAKAN LINK MANUAL ANDA)
     // =======================================
     const chargers = [
-      { name: "Kelapa Gading", lat: -6.159635, lng: 106.906682, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
-      { name: "Radio Dalam", lat: -6.257621, lng: 106.802051, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
-      { name: "Bekasi", lat: -6.243967, lng: 106.994823, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir Berbayar - Emoney)" },
-      { name: "Gading Serpong", lat: -6.246792, lng: 106.629594, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir Berbayar)" },
-      { name: "Depok", lat: -6.402484, lng: 106.794240, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
-      { name: "Marbella Kemang Residence", lat: -6.260627, lng: 106.813746, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir berbayar)" },
+      { name: "Kelapa Gading", lat: -6.159635, lng: 106.906682, link: "https://maps.app.goo.gl/TKfjDuwrEFU2tHoF9", type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Radio Dalam", lat: -6.257621, lng: 106.802051, link: "https://maps.app.goo.gl/VULRCigqJ4iM8SSZ6", type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Bekasi", lat: -6.243967, lng: 106.994823, link: "https://maps.app.goo.gl/4fdRXFebJHJW63Dg7", type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir Berbayar - Emoney)" },
+      { name: "Gading Serpong", lat: -6.246792, lng: 106.629594, link: "https://maps.app.goo.gl/j5oeATswU7J9e9jj7", type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir Berbayar)" },
+      { name: "Depok", lat: -6.402484, lng: 106.794240, link: "https://maps.app.goo.gl/FYH2yXqo1Mgipz6R7", type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Marbella Kemang Residence", lat: -6.260627, lng: 106.813746, link: "https://maps.app.goo.gl/wwzT9iLS34WFRgyi9", type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir berbayar)" },
       
-      { name: "Starvo PIK", lat: -6.124106, lng: 106.739785, type: "Medium", nozzles: 2, hours: "Senin–Jumat 08.00–19.00; Sabtu 08.00–17.00", cost: 'Berbayar (via <a href="https://play.google.com/store/apps/details?id=com.moizasia.starvo_mobile" target="_blank">Starvo App</a>)' },
+      // --- KOORDINAT & LINK DIPERBAIKI ---
+      { name: "Starvo PIK", lat: -6.124106, lng: 106.739785, link: "https://maps.app.goo.gl/6c5mKecEKvGqjv3Y7", type: "Medium", nozzles: 2, hours: "Senin–Jumat 08.00–19.00; Sabtu 08.00–17.00", cost: 'Berbayar (via <a href="https://play.google.com/store/apps/details?id=com.moizasia.starvo_mobile" target="_blank">Starvo App</a>)' },
       
-      { name: "Starvo Kedoya", lat: -6.186334, lng: 106.766978, type: "Medium", nozzles: 1, hours: "Senin–Jumat 09.00–17.00; Sabtu 09.00–14.00", cost: 'Berbayar (via <a href="https://starvo.co.id/" target="_blank">Starvo App</a>)' },
-      { name: "Ciledug", lat: -6.237947, lng: 106.708237, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
-      { name: "Bintaro", lat: -6.276471, lng: 106.730544, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
-      { name: "Motoriz Meruya", lat: -6.200132, lng: 106.737796, type: "Fast", nozzles: 2, hours: "09.00–19.00 WIB", cost: "Rp. 5.000 / jam" },
-      { name: "Motoriz Kranggan", lat: -6.340640, lng: 106.943016, type: "Fast", nozzles: 2, hours: "09.00–19.00 WIB", cost: 'Berbayar (via <a href="https://casan.id/" target="_blank">Casan.id</a>)' },
-      { name: "Warung Bu Ratna Cirendeu", lat: -6.310043, lng: 106.758325, type: "Fast", nozzles: 2, hours: "06.00–23.59", cost: "1k per 10%" },
-      { name: "Klinik Pratama Condet", lat: -6.295322, lng: 106.863682, type: "Fast", nozzles: 2, hours: "07.00 - Sampe tukang martabak pulang", cost: 'Gratis' },
+      { name: "Starvo Kedoya", lat: -6.186334, lng: 106.766978, link: "https://maps.app.goo.gl/HSKbMPz5UrwW178V9", type: "Medium", nozzles: 1, hours: "Senin–Jumat 09.00–17.00; Sabtu 09.00–14.00", cost: 'Berbayar (via <a href="https://starvo.co.id/" target="_blank">Starvo App</a>)' },
+      { name: "Ciledug", lat: -6.237947, lng: 106.708237, link: "https://maps.app.goo.gl/DSJiJyAW1BvL2Gwm8", type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Bintaro", lat: -6.276471, lng: 106.730544, link: "https://maps.app.goo.gl/yZNxoj2gyutxd4zJA", type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Motoriz Meruya", lat: -6.200132, lng: 106.737796, link: "https://maps.app.goo.gl/xLqKRsEZ9WpBpTjf9", type: "Fast", nozzles: 2, hours: "09.00–19.00 WIB", cost: "Rp. 5.000 / jam" },
+      { name: "Motoriz Kranggan", lat: -6.340640, lng: 106.943016, link: "https://maps.app.goo.gl/bA1248oJ5C8pUXhg9", type: "Fast", nozzles: 2, hours: "09.00–19.00 WIB", cost: 'Berbayar (via <a href="https://casan.id/" target="_blank">Casan.id</a>)' },
+      { name: "Warung Bu Ratna Cirendeu", lat: -6.310043, lng: 106.758325, link: "https://maps.app.goo.gl/Eyi3nNZHNMU64iYY7", type: "Fast", nozzles: 2, hours: "06.00–23.59", cost: "1k per 10%" },
+      { name: "Klinik Pratama Condet", lat: -6.295322, lng: 106.863682, link: "https://maps.app.goo.gl/hTwbD4wEKB8g5qnU8?g_st=ac", type: "Fast", nozzles: 2, hours: "07.00 - Sampe tukang martabak pulang", cost: 'Gratis' },
       
-      { name: "Mister Kong Steam Wash", lat: -6.350800, lng: 106.830000, type: "Fast", nozzles: 2, hours: "10.00 - 22.00", cost: 'Berbayar (via <a href="https://casan.id/" target="_blank">Casan.id</a>)' },
+      // --- KOORDINAT & LINK DIPERBAIKI ---
+      { name: "Mister Kong Steam Wash", lat: -6.350800, lng: 106.830000, link: "https://maps.app.goo.gl/n6nUVbQzWay6f2MG6", type: "Fast", nozzles: 2, hours: "10.00 - 22.00", cost: 'Berbayar (via <a href="https://casan.id/" target="_blank">Casan.id</a>)' },
       
-      { name: "Hotel Kartika Chandra", lat: -6.227645, lng: 106.819109, type: "Fast", nozzles: 5, hours: "24 jam", cost: 'Berbayar (via <a href="https://play.google.com/store/apps/details?id=com.moizasia.starvo_mobile" target="_blank">Starvo App</a>)' },
+      // --- KOORDINAT, LINK & KOMA DIPERBAIKI ---
+      { name: "Hotel Kartika Chandra", lat: -6.227645, lng: 106.819109, link: "https://maps.app.goo.gl/osYqkiaaebUoauxq5", type: "Fast", nozzles: 5, hours: "24 jam", cost: 'Berbayar (via <a href="https://play.google.com/store/apps/details?id=com.moizasia.starvo_mobile" target="_blank">Starvo App</a>)' },
       
-      { name: "Suzuki Cengkareng", lat: -6.150602, lng: 106.727243, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
-      { name: "Dem Pro Kalimalang", lat: -6.243608, lng: 106.902289, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Suzuki Cengkareng", lat: -6.150602, lng: 106.727243, link: "https://maps.app.goo.gl/uy6GpcKEHUtQHoFz7?g_st", type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Dem Pro Kalimalang", lat: -6.243608, lng: 106.902289, link: "https://maps.app.goo.gl/gKJaJv6qu28jUm659", type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
+      // Mengubah nama Transgo Matraman menjadi Trans go Matraman sesuai input terakhir Anda
+      { name: "Trans go Matraman", lat: -6.208959, lng: 106.878911, link: "https://maps.app.goo.gl/dZD5YVGP7NHFJ8bKA", type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" }
       
-      { 
-        name: "Transgo Matraman", 
-        lat: -6.208959, 
-        lng: 106.878911, 
-        type: "Info CP", 
-        nozzles: "?", 
-        hours: "24 jam", 
-        cost: "Info CP (Sewa Motor)",
-        cp: "628118118894" // Nomor CP khusus
-      }
+      
     ];
 
     // --- Definisi Fungsi ---
@@ -548,7 +544,7 @@
     }
 
     // =======================================
-    // FUNGSI RENDER DENGAN LINK & FITUR LENGKAP
+    // FUNGSI RENDER (MENGGUNAKAN charger.link)
     // =======================================
     function renderCards(list, container) {
       if (!container) return; 
@@ -564,15 +560,15 @@
         card.style.animationDelay = (index * 50) + 'ms'; 
         const distanceHTML = charger.distance ? `<span class="card-distance">(📍 ${charger.distance.toFixed(1)} km)</span>` : '';
         
-        // --- PERBAIKAN LINK GOOGLE MAPS DI SINI ---
-        const mapsLink = `https://maps.google.com/maps?q=${charger.lat},${charger.lng}`;
+        // --- PERBAIKAN: MENGGUNAKAN LINK MANUAL ANDA ---
+        const mapsLink = charger.link;
 
         // Link Lapor (Otomatis isi nama lokasi)
         const adminWA = "6282310253644"; // Nomor Ketum Ilham
         const reportText = `Lapor: Lokasi ${charger.name} sedang bermasalah. \n\n(Tolong jelaskan masalahnya, misal: mati, penuh, dll...)\n\n(Terkirim dari Web App Lokasi FC)`;
         const reportLink = `https://wa.me/${adminWA}?text=${encodeURIComponent(reportText)}`;
 
-        // --- LOGIKA BARU UNTUK TOMBOL CP ---
+        // --- LOGIKA UNTUK TOMBOL CP (Jika ada) ---
         let cpButtonHTML = ''; // Kosong by default
         if (charger.cp) {
           const cpText = `Halo, saya mau tanya info charging di ${charger.name}.`;
@@ -597,7 +593,6 @@
             </div>
           </div>
         `;
-        // --- AKHIR LOGIKA BARU ---
         
         container.appendChild(card);
       });
@@ -632,7 +627,7 @@
     
     document.addEventListener('DOMContentLoaded', ()=>{
       
-      // 1. Tentukan SEMUA variabel elemen DI DALAM sini
+      // 1. Tentukan SEMUA variabel elemen
       const listContainer = document.querySelector('.list-container');
       const findBtn = document.getElementById('manualFindBtn');
       const helpBtn = document.getElementById('helpBtn');
@@ -642,8 +637,6 @@
       const welcomeFind = document.getElementById('welcomeFind');
       const welcomeSOS  = document.getElementById('welcomeSOS');
       const countEl = document.getElementById('count');
-      
-      // --- Variabel untuk FITUR PENCARIAN & TO TOP ---
       const searchBox = document.getElementById('searchBox');
       const toTopBtn = document.getElementById('toTopBtn');
 
@@ -750,7 +743,7 @@
         });
       }
       
-      // --- PERBAIKAN: LISTENER ACCORDION Sederhana ---
+      // --- FIX: LISTENER ACCORDION ---
       if(listContainer) {
         listContainer.addEventListener('click', (e) => {
           if (e.target.tagName === 'SUMMARY') {
