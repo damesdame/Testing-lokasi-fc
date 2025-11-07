@@ -482,7 +482,7 @@
   <script>
     
     // =======================================
-    // PERBAIKAN: KOMA HILANG, KOORDINAT SALAH, DAN SEMUA 'link:' DIHAPUS
+    // DATA CHARGER
     // =======================================
     const chargers = [
       { name: "Kelapa Gading", lat: -6.159635, lng: 106.906682, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
@@ -492,7 +492,6 @@
       { name: "Depok", lat: -6.402484, lng: 106.794240, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
       { name: "Marbella Kemang Residence", lat: -6.260627, lng: 106.813746, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir berbayar)" },
       
-      // lat/lng Starvo PIK diperbaiki
       { name: "Starvo PIK", lat: -6.124106, lng: 106.739785, type: "Medium", nozzles: 2, hours: "Senin–Jumat 08.00–19.00; Sabtu 08.00–17.00", cost: 'Berbayar (via <a href="https://play.google.com/store/apps/details?id=com.moizasia.starvo_mobile" target="_blank">Starvo App</a>)' },
       
       { name: "Starvo Kedoya", lat: -6.186334, lng: 106.766978, type: "Medium", nozzles: 1, hours: "Senin–Jumat 09.00–17.00; Sabtu 09.00–14.00", cost: 'Berbayar (via <a href="https://starvo.co.id/" target="_blank">Starvo App</a>)' },
@@ -503,18 +502,13 @@
       { name: "Warung Bu Ratna Cirendeu", lat: -6.310043, lng: 106.758325, type: "Fast", nozzles: 2, hours: "06.00–23.59", cost: "1k per 10%" },
       { name: "Klinik Pratama Condet", lat: -6.295322, lng: 106.863682, type: "Fast", nozzles: 2, hours: "07.00 - Sampe tukang martabak pulang", cost: 'Gratis' },
       
-      // lat/lng Mister Kong diperbaiki
       { name: "Mister Kong Steam Wash", lat: -6.350800, lng: 106.830000, type: "Fast", nozzles: 2, hours: "10.00 - 22.00", cost: 'Berbayar (via <a href="https://casan.id/" target="_blank">Casan.id</a>)' },
       
-      // lat/lng Kartika Chandra diperbaiki
       { name: "Hotel Kartika Chandra", lat: -6.227645, lng: 106.819109, type: "Fast", nozzles: 5, hours: "24 jam", cost: 'Berbayar (via <a href="https://play.google.com/store/apps/details?id=com.moizasia.starvo_mobile" target="_blank">Starvo App</a>)' },
-      
-      // --- KOMA (,) YANG HILANG SEKARANG SUDAH ADA DI SINI ---
       
       { name: "Suzuki Cengkareng", lat: -6.150602, lng: 106.727243, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
       { name: "Dem Pro Kalimalang", lat: -6.243608, lng: 106.902289, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
       
-      // --- LOKASI BARU DENGAN FIELD 'cp' ---
       { 
         name: "Transgo Matraman", 
         lat: -6.208959, 
@@ -570,9 +564,8 @@
         card.style.animationDelay = (index * 50) + 'ms'; 
         const distanceHTML = charger.distance ? `<span class="card-distance">(📍 ${charger.distance.toFixed(1)} km)</span>` : '';
         
-        // --- INI ADALAH LINK YANG BENAR ---
-        // Membuat link Google Maps yang valid secara dinamis dari lat/lng
-        const mapsLink = `https://maps.app.goo.gl/2dEoMaxPMdvA5e3561`;
+        // --- PERBAIKAN LINK GOOGLE MAPS DI SINI ---
+        const mapsLink = `https://maps.google.com/maps?q=${charger.lat},${charger.lng}`;
 
         // Link Lapor (Otomatis isi nama lokasi)
         const adminWA = "6282310253644"; // Nomor Ketum Ilham
@@ -650,9 +643,9 @@
       const welcomeSOS  = document.getElementById('welcomeSOS');
       const countEl = document.getElementById('count');
       
-      // --- Variabel untuk FITUR YANG HILANG ---
-      const searchBox = document.getElementById('searchBox'); // Ini akan null
-      const toTopBtn = document.getElementById('toTopBtn');   // Ini akan null
+      // --- Variabel untuk FITUR PENCARIAN & TO TOP ---
+      const searchBox = document.getElementById('searchBox');
+      const toTopBtn = document.getElementById('toTopBtn');
 
       
       // Fungsi untuk update display (Hanya Render)
@@ -710,7 +703,8 @@
           
           const firstCard = listContainer.querySelector('.card');
           if (firstCard) {
-            firstCard.open = true;
+            // Perlu ditunda sedikit agar card ter-render sempurna
+            setTimeout(() => { firstCard.open = true; }, 100);
           }
 
         }, err => {
@@ -741,8 +735,8 @@
       // PASANG SEMUA LISTENER
       // =======================================
       
-      // --- Listener Fitur yang Hilang (diberi pengaman 'if') ---
       if(searchBox) searchBox.addEventListener('input', updateDisplay);
+      
       if(toTopBtn) {
         window.onscroll = () => {
           if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
@@ -755,18 +749,21 @@
           window.scrollTo({top: 0, behavior: 'smooth'});
         });
       }
+      
+      // --- PERBAIKAN: LISTENER ACCORDION Sederhana ---
       if(listContainer) {
         listContainer.addEventListener('click', (e) => {
           if (e.target.tagName === 'SUMMARY') {
-            const currentDetail = e.target.parentElement;
-            const isOpening = !currentDetail.open;
+            const currentDetail = e.target.closest('details');
             const allDetails = listContainer.querySelectorAll('details');
+            
+            // Tutup semua kecuali yang sedang di-klik
             allDetails.forEach(detail => {
               if (detail !== currentDetail) {
                 detail.open = false;
               }
             });
-            currentDetail.open = isOpening;
+            // Biarkan browser yang menangani perubahan status 'open' pada currentDetail
           }
         });
       }
@@ -775,8 +772,10 @@
       if(findBtn) findBtn.addEventListener('click', findAndSortCards);
       if(helpBtn) helpBtn.addEventListener('click', ()=>{
         if (helpPanel) {
-          helpPanel.style.right = helpPanel.style.right === '0px' ? '-320px' : '0px';
-          helpPanel.setAttribute('aria-hidden', helpPanel.style.right === '0px');
+          // Toggle Panel
+          const isOpen = helpPanel.style.right === '0px';
+          helpPanel.style.right = isOpen ? '-320px' : '0px';
+          helpPanel.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
         }
       });
       if(closeHelp) closeHelp.addEventListener('click', ()=> { 
