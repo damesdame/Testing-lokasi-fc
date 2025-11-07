@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lokasi FC MAKA</title>
+  <style>
+    :root{
+      --bg1:#0a192f;
+      --bg2:#172a45;
+      --neon:#64ffda;
+      --text:#e6f1ff;
+      --card-bg: rgba(10,25,47,0.85);
+      --warn: #ff9a64; /* Oranye untuk lapor */
+      --info: #64bfff; /* Biru untuk CP */
+    }
+    
+    html {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+    body{
+      min-height: 100%; 
+      margin:0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      text-align:center;
+    }
+    
+    header{
+      padding:18px 16px 8px 16px;
+      position:relative;
+    }
+    .logo-container{
+      display:inline-block;
+      vertical-align:middle;
+    }
+    .logo-container img{
+      width:110px;
+      height:auto;
+      border-radius:0;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    }
+    
+    header h1{
+      margin:8px 0 12px 0;
+      color:var(--neon);
+      font-size:1.6rem;
+      text-shadow: 0 0 8px rgba(100,255,218,0.18);
+      font-weight:700;
+    }
+    
+    #searchBox {
+      width: 90%;
+      max-width: 500px;
+      padding: 10px 14px;
+      margin: 0 auto 12px auto;
+      display: block;
+      background: var(--bg1);
+      border: 1px solid rgba(100,255,218,0.2);
+      color: var(--text);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    #searchBox:focus {
+      outline: none;
+      border-color: var(--neon);
+      box-shadow: 0 0 12px rgba(100,255,218,0.3);
+      background: var(--bg2);
+    }
+    #searchBox::placeholder {
+      color: rgba(230,241,255,0.5);
+    }
+    
+    .find-btn{
+      padding:10px 18px;
+      margin:8px auto 12px auto;
+      display:inline-block;
+      background:transparent;
+      border:2px solid var(--neon);
+      color:var(--neon);
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow: 0 0 12px rgba(100,255,218,0.25);
+      transition:all .2s ease;
+      min-width: 220px;
+    }
+    .find-btn:hover{
+      background:var(--neon);
+      color:var(--bg1);
+      box-shadow: 0 0 26px rgba(100,255,218,0.7);
+    }
+    .find-btn.loading, .find-btn:disabled {
+      cursor: not-allowed;
+      background: var(--bg2);
+      color: var(--text);
+      opacity: 0.7;
+      box-shadow: none;
+    }
+
+    /* List Container Styles */
+    main.list-container{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 18px 18px 110px 18px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .card{
+      background: var(--card-bg);
+      border: 1px solid rgba(100,255,218,0.12);
+      border-radius:12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.08);
+      text-align:left;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeIn 0.4s ease-out forwards;
+      transition: background 0.2s ease;
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .card[open] {
+      background: var(--bg2);
+    }
+    
+    .card summary {
+      padding: 14px 18px;
+      color: var(--neon);
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      list-style: none;
+      position: relative;
+      transition: background 0.2s ease;
+    }
+    .card summary:hover {
+      background: rgba(100,255,218,0.05);
+    }
+    .card summary::-webkit-details-marker {
+      display: none;
+    }
+    .card summary::after {
+      content: '+';
+      font-family: monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--neon);
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.2s ease;
+    }
+    .card[open] summary::after {
+      content: '−';
+      transform: translateY(-50%) rotate(180deg);
+    }
+    .card-distance {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--text);
+      opacity: 0.9;
+      margin-left: 8px;
+    }
+    .card-content {
+      padding: 0 18px 16px 18px;
+      border-top: 1px solid rgba(100,255,218,0.1);
+      margin: 0 12px;
+    }
+    .card-content p{
+      margin: 8px 0;
+      font-size:0.85rem;
+      color:var(--text);
+      line-height:1.2;
+    }
+    .card-content p a {
+      color: var(--neon);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    
+    /* CSS untuk 3 Tombol */
+    .card-actions {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .card-content a.nav-link{
+      padding: 8px 12px;
+      background: var(--neon);
+      color: var(--bg1);
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      flex-grow: 1;
+      text-align: center;
+      transition: all 0.2s ease;
+      margin-top: 0; /* Hapus margin-top lama */
+    }
+    .card-content a.nav-link:hover {
+      opacity: 0.85;
+    }
+    
+    .report-btn, .cp-btn {
+      padding: 8px 10px;
+      background: transparent;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    
+    .report-btn {
+      border: 1px solid var(--warn);
+      color: var(--warn);
+    }
+    .report-btn:hover {
+      background: rgba(255, 154, 100, 0.15);
+      color: #fff;
+    }
+    
+    .cp-btn {
+      border: 1px solid var(--info);
+      color: var(--info);
+    }
+    .cp-btn:hover {
+      background: rgba(100, 191, 255, 0.15);
+      color: #fff;
+    }
+
+    /* Footer, Help Button, Help Panel */
+    footer{
+      position:fixed;
+      bottom:0;
+      left:0;
+      width:100%;
+      background: rgba(10,25,47,0.98);
+      padding:10px 12px;
+      box-shadow: 0 -4px 18px rgba(0,0,0,0.6);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:20px;
+      z-index:900;
+    }
+    .footer-title{
+      font-size:1.1rem;
+      color:var(--neon);
+      font-weight:700;
+      margin:0;
+      letter-spacing: 6px;
+    }
+    .footer-subtitle{
+      font-size:0.75rem;
+      color:#ccd6f6;
+      margin:0;
+      opacity:0.9;
+    }
+    #viewerCount{
+      color:var(--neon);
+      font-weight:700;
+      font-size:0.95rem;
+      text-shadow: 0 0 6px rgba(100,255,218,0.16);
+    }
+    #helpBtn {
+      position:absolute;
+      top:14px;
+      right:18px;
+      background:var(--neon);
+      color:var(--bg1);
+      border:none;
+      border-radius:22px;
+      padding:8px 12px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 0 16px rgba(100,255,218,0.5);
+      z-index:800;
+    }
+    @media (max-width:600px){
+      #helpBtn{
+        position:static;
+        display:block;
+        margin:8px auto 0 auto;
+      }
+      header h1{font-size:1.2rem;}
+      .logo-container img{width:88px;}
+      main.list-container{ gap:8px; padding: 12px 12px 110px 12px; }
+      .card summary {
+        padding: 12px 15px;
+        font-size: 1.0rem;
+      }
+      .card-distance {
+        display: block;
+        margin-left: 0;
+        margin-top: 2px;
+      }
+    }
+    #helpPanel{
+      position:fixed;
+      top:0;
+      right:-320px;
+      width:300px;
+      height:100%;
+      background: rgba(10,25,47,0.97);
+      box-shadow: -2px 0 18px rgba(100,255,218,0.28);
+      border-left:1px solid rgba(100,255,218,0.12);
+      color:var(--text);
+      padding:18px;
+      transition:right .36s ease;
+      z-index:980;
+      overflow:auto;
+      font-size:0.9rem;
+    }
+
+    /* Welcome Modal */
+    #welcomeOverlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,0.55);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:10000;
+    }
+    #welcomeBox{
+      background: rgba(10,25,47,0.98);
+      color:var(--text);
+      border-radius:12px;
+      padding:18px;
+      border:1px solid rgba(100,255,218,0.14);
+      min-width:280px;
+      text-align:center;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    }
+    #welcomeBox h3{
+      margin:6px 0 10px 0;
+      color:var(--neon);
+      font-size:1.1rem;
+    }
+    #welcomeBox p{margin:0 0 10px 0; font-size:0.95rem;}
+    .welcome-actions{display:flex; gap:8px; justify-content:center; margin-top:10px; flex-wrap:wrap;}
+    .welcome-actions button{
+      padding:8px 12px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+    }
+    .btn-welcome-primary{ background:var(--neon); color:var(--bg1); }
+    .btn-welcome-alt{ background:transparent; color:var(--neon); border:1px solid rgba(100,255,218,0.18); }
+    
+    /* Toast Notification Style */
+    #toastNotification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translate(-50%, -100px);
+      background: var(--neon);
+      color: var(--bg1);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      z-index: 10001;
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      visibility: hidden;
+      max-width: 90%;
+    }
+    #toastNotification.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Tombol "Back to Top" */
+    #toTopBtn {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: var(--neon);
+      color: var(--bg1);
+      border: none;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 950;
+      display: none;
+      opacity: 0.8;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    #toTopBtn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <img src="mlu-logo.png" alt="MLU Logo" id="mluLogo">
+    </div>
+    <h1>Lokasi Fast Charging</h1>
+    
+    <input type="search" id="searchBox" placeholder="🔍 Cari lokasi (cth: Bekasi, Gratis)">
+    
+    <button class="find-btn" id="manualFindBtn">📍 Temukan Lokasi FC Terdekat</button>
+    <button id="helpBtn" aria-label="Bantuan">🆘 Bantuan</button>
+  </header>
+
+  <main class="list-container">
+    </main>
+
+  <footer>
+    <div>
+      <p class="footer-title">© MLU Squad</p>
+      <p class="footer-subtitle">Maka Lintas Utara</p>
+    </div>
+    <div id="viewerCount"><span id="count">—</span> viewers</div>
+  </footer>
+  
+  <button id="toTopBtn" title="Kembali ke atas">⬆️</button>
+
+  <div id="helpPanel" aria-hidden="true">
+    <h3 style="color:var(--neon); margin-top:0; text-shadow:0 0 8px rgba(100,255,218,0.12);">Menu bantuan </h3>
+    <p>Motor mati, butuh towing/bantuan lain atau tanya soal tagihan xendit?</p>
+    <p>Klik salah satu nomor di bawah ini untuk menghubungi via WhatsApp 👇</p>
+    <div style="text-align:left; margin-top:12px; font-size:0.92rem;">
+      <p>🏍️ <strong>Kendala Unit</strong><br>
+        <a href="https://wa.me/6287722285445?text=Halo%2C%2C%20saya%20butuh%20bantuan%20towing" target="_blank" style="color:var(--neon); text-decoration:none;">+62-877-2228-5445</a>
+      </p>
+      <p>📞 <strong>Info Tagihan /Xendit </strong><br>
+        <a href="https://wa.me/6285117468556?text=Halo%2C%20saya%20butuh%20informasi%20tentang%20tagihan" target="_blank" style="color:var(--neon); text-decoration:none;">+62 851-1746-8556</a>
+      </p>
+      <p>📞 <strong>RTO Akbar</strong><br>
+        <a href="https://wa.me/6285281760728?text=Halo%2C%20saya%20butuh%20informasi%20tentang%20Maka" target="_blank" style="color:var(--neon); text-decoration:none;">+62 852-8176-0728</a>
+      </p>
+      <p>📞 <strong>Ketum MLU Ilham</strong><br>
+        <a href="https://wa.me/6282310253644?text=Bang%2C%20saya%20butuh%20bantuan" target="_blank" style="color:var(--neon); text-decoration:none;">+62 823-1025-3644</a>
+      </p>
+    </div>
+    <button id="closeHelp" style="margin-top:18px; width:100%; padding:8px; border-radius:8px; border:1px solid rgba(100,255,218,0.12); background:transparent; color:var(--neon); font-weight:700; cursor:pointer;">Tutup</button>
+  </div>
+
+  <div id="welcomeOverlay" style="display:none;">
+    <div id="welcomeBox" role="dialog" aria-modal="true" aria-label="Selamat datang">
+      <h3>Mau Ape Lu ?</h3>
+      <p>Pilih satu:</p>
+      <div class="welcome-actions">
+        <button class="btn-welcome-primary" id="welcomeFind">📍 cari lokasi fc terdekat</button>
+        <button class="btn-welcome-alt" id="welcomeSOS">🆘 Perlu Bantuan / SOS</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastNotification"></div>
+
+  <script>
+    
+    // =======================================
+    // PERBAIKAN: KOMA HILANG, KOORDINAT SALAH, DAN SEMUA 'link:' DIHAPUS
+    // =======================================
+    const chargers = [
+      { name: "Kelapa Gading", lat: -6.159635, lng: 106.906682, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Radio Dalam", lat: -6.257621, lng: 106.802051, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Bekasi", lat: -6.243967, lng: 106.994823, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir Berbayar - Emoney)" },
+      { name: "Gading Serpong", lat: -6.246792, lng: 106.629594, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir Berbayar)" },
+      { name: "Depok", lat: -6.402484, lng: 106.794240, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Marbella Kemang Residence", lat: -6.260627, lng: 106.813746, type: "Fast", nozzles: 3, hours: "24 jam 7/7", cost: "Gratis (Parkir berbayar)" },
+      
+      // lat/lng Starvo PIK diperbaiki
+      { name: "Starvo PIK", lat: -6.124106, lng: 106.739785, type: "Medium", nozzles: 2, hours: "Senin–Jumat 08.00–19.00; Sabtu 08.00–17.00", cost: 'Berbayar (via <a href="https://play.google.com/store/apps/details?id=com.moizasia.starvo_mobile" target="_blank">Starvo App</a>)' },
+      
+      { name: "Starvo Kedoya", lat: -6.186334, lng: 106.766978, type: "Medium", nozzles: 1, hours: "Senin–Jumat 09.00–17.00; Sabtu 09.00–14.00", cost: 'Berbayar (via <a href="https://starvo.co.id/" target="_blank">Starvo App</a>)' },
+      { name: "Ciledug", lat: -6.237947, lng: 106.708237, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Bintaro", lat: -6.276471, lng: 106.730544, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Motoriz Meruya", lat: -6.200132, lng: 106.737796, type: "Fast", nozzles: 2, hours: "09.00–19.00 WIB", cost: "Rp. 5.000 / jam" },
+      { name: "Motoriz Kranggan", lat: -6.340640, lng: 106.943016, type: "Fast", nozzles: 2, hours: "09.00–19.00 WIB", cost: 'Berbayar (via <a href="https://casan.id/" target="_blank">Casan.id</a>)' },
+      { name: "Warung Bu Ratna Cirendeu", lat: -6.310043, lng: 106.758325, type: "Fast", nozzles: 2, hours: "06.00–23.59", cost: "1k per 10%" },
+      { name: "Klinik Pratama Condet", lat: -6.295322, lng: 106.863682, type: "Fast", nozzles: 2, hours: "07.00 - Sampe tukang martabak pulang", cost: 'Gratis' },
+      
+      // lat/lng Mister Kong diperbaiki
+      { name: "Mister Kong Steam Wash", lat: -6.350800, lng: 106.830000, type: "Fast", nozzles: 2, hours: "10.00 - 22.00", cost: 'Berbayar (via <a href="https://casan.id/" target="_blank">Casan.id</a>)' },
+      
+      // lat/lng Kartika Chandra diperbaiki
+      { name: "Hotel Kartika Chandra", lat: -6.227645, lng: 106.819109, type: "Fast", nozzles: 5, hours: "24 jam", cost: 'Berbayar (via <a href="https://play.google.com/store/apps/details?id=com.moizasia.starvo_mobile" target="_blank">Starvo App</a>)' },
+      
+      // --- KOMA (,) YANG HILANG SEKARANG SUDAH ADA DI SINI ---
+      
+      { name: "Suzuki Cengkareng", lat: -6.150602, lng: 106.727243, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
+      { name: "Dem Pro Kalimalang", lat: -6.243608, lng: 106.902289, type: "Fast", nozzles: 2, hours: "24 jam 7/7", cost: "Gratis" },
+      
+      // --- LOKASI BARU DENGAN FIELD 'cp' ---
+      { 
+        name: "Transgo Matraman", 
+        lat: -6.208959, 
+        lng: 106.878911, 
+        type: "Info CP", 
+        nozzles: "?", 
+        hours: "24 jam", 
+        cost: "Info CP (Sewa Motor)",
+        cp: "628118118894" // Nomor CP khusus
+      }
+    ];
+
+    // --- Definisi Fungsi ---
+
+    // Toast Notification Function
+    let toastTimeout;
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      if (!toast) return;
+
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Utility: getDistance
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    // =======================================
+    // FUNGSI RENDER DENGAN LINK & FITUR LENGKAP
+    // =======================================
+    function renderCards(list, container) {
+      if (!container) return; 
+      container.innerHTML = '';
+      
+      if (list.length === 0) {
+        container.innerHTML = '<p style="color: var(--text); opacity: 0.7;">Lokasi tidak ditemukan...</p>';
+      }
+      
+      list.forEach((charger, index) => {
+        const card = document.createElement('details');
+        card.className = 'card';
+        card.style.animationDelay = (index * 50) + 'ms'; 
+        const distanceHTML = charger.distance ? `<span class="card-distance">(📍 ${charger.distance.toFixed(1)} km)</span>` : '';
+        
+        // --- INI ADALAH LINK YANG BENAR ---
+        // Membuat link Google Maps yang valid secara dinamis dari lat/lng
+        const mapsLink = `https://maps.app.goo.gl/2dEoMaxPMdvA5e3561`;
+
+        // Link Lapor (Otomatis isi nama lokasi)
+        const adminWA = "6282310253644"; // Nomor Ketum Ilham
+        const reportText = `Lapor: Lokasi ${charger.name} sedang bermasalah. \n\n(Tolong jelaskan masalahnya, misal: mati, penuh, dll...)\n\n(Terkirim dari Web App Lokasi FC)`;
+        const reportLink = `https://wa.me/${adminWA}?text=${encodeURIComponent(reportText)}`;
+
+        // --- LOGIKA BARU UNTUK TOMBOL CP ---
+        let cpButtonHTML = ''; // Kosong by default
+        if (charger.cp) {
+          const cpText = `Halo, saya mau tanya info charging di ${charger.name}.`;
+          const cpLink = `https://wa.me/${charger.cp}?text=${encodeURIComponent(cpText)}`;
+          cpButtonHTML = `<a href="${cpLink}" target="_blank" class="cp-btn">📞 Hubungi CP</a>`;
+        }
+        
+        card.innerHTML = `
+          <summary>
+            ⚡ ${charger.name}
+            ${distanceHTML}
+          </summary>
+          <div class="card-content">
+            <p>🔌 Tipe Charger: ${charger.type}</p>
+            <p>🔋 Jumlah Nozzle: ${charger.nozzles}</p>
+            <p>⏰ Operasional: ${charger.hours}</p>
+            <p>💰 Biaya: ${charger.cost}</p>
+            <div class="card-actions">
+              <a href="${mapsLink}" target="_blank" class="nav-link">📍 Buka Navigasi</a>
+              <a href="${reportLink}" target="_blank" class="report-btn">⚠️ Laporkan</a>
+              ${cpButtonHTML} 
+            </div>
+          </div>
+        `;
+        // --- AKHIR LOGIKA BARU ---
+        
+        container.appendChild(card);
+      });
+    }
+
+    // Visitor counter function
+    async function updateVisitCounter(countEl) {
+      if (!countEl) return;
+      const namespace = 'mlu-charger';
+      const key = 'visits';
+      try {
+        const res = await fetch(`https://api.countapi.xyz/hit/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`);
+        if(!res.ok) throw new Error('countapi error');
+        const data = await res.json();
+        if(data && typeof data.value !== 'undefined'){
+          countEl.textContent = data.value.toLocaleString();
+          return;
+        }
+      } catch(err){ }
+      try {
+        const localKey = 'mlu_visits_fallback_v1';
+        let val = parseInt(localStorage.getItem(localKey) || '0', 10);
+        val = isNaN(val) ? 1 : val + 1;
+        localStorage.setItem(localKey, val);
+        countEl.textContent = val.toLocaleString();
+      } catch(e){
+        countEl.textContent = '—';
+      }
+    }
+
+    // --- MAIN SCRIPT ---
+    
+    document.addEventListener('DOMContentLoaded', ()=>{
+      
+      // 1. Tentukan SEMUA variabel elemen DI DALAM sini
+      const listContainer = document.querySelector('.list-container');
+      const findBtn = document.getElementById('manualFindBtn');
+      const helpBtn = document.getElementById('helpBtn');
+      const helpPanel = document.getElementById('helpPanel');
+      const closeHelp = document.getElementById('closeHelp');
+      const welcomeOverlay = document.getElementById('welcomeOverlay');
+      const welcomeFind = document.getElementById('welcomeFind');
+      const welcomeSOS  = document.getElementById('welcomeSOS');
+      const countEl = document.getElementById('count');
+      
+      // --- Variabel untuk FITUR YANG HILANG ---
+      const searchBox = document.getElementById('searchBox'); // Ini akan null
+      const toTopBtn = document.getElementById('toTopBtn');   // Ini akan null
+
+      
+      // Fungsi untuk update display (Hanya Render)
+      function updateDisplay() {
+        if (!listContainer) return;
+        
+        let listToRender = [...chargers]; // Salin array
+        
+        // --- FITUR PENCARIAN ---
+        if (searchBox && searchBox.value) {
+            const searchTerm = searchBox.value.toLowerCase();
+            listToRender = listToRender.filter(charger => {
+              const nameMatch = charger.name.toLowerCase().includes(searchTerm);
+              const costMatch = charger.cost.toLowerCase().includes(searchTerm);
+              return nameMatch || costMatch;
+            });
+        }
+        
+        // --- FITUR SORTIR ---
+        if (findBtn && findBtn.disabled) { 
+          listToRender.sort((a, b) => (a.distance || 9999) - (b.distance || 9999));
+        }
+        
+        renderCards(listToRender, listContainer);
+      }
+      
+      // Fungsi Find and Sort
+      function findAndSortCards() {
+        if(!navigator.geolocation){
+          showToast("⚠️ Browser tidak mendukung deteksi lokasi.");
+          return;
+        }
+        if(!findBtn) return;
+
+        findBtn.classList.add('loading');
+        findBtn.textContent = 'Mencari Lokasi...';
+        findBtn.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(pos => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+
+          chargers.forEach(c => {
+            c.distance = getDistance(lat, lng, c.lat, c.lng);
+          });
+          
+          findBtn.classList.remove('loading');
+          findBtn.textContent = '✅ Lokasi Diurutkan';
+          findBtn.disabled = true; 
+
+          updateDisplay(); // Panggil ini untuk me-render
+          
+          showToast("✅ Daftar FC sudah diurutkan dari yang terdekat dgn lokasi anda sekarang!");
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          
+          const firstCard = listContainer.querySelector('.card');
+          if (firstCard) {
+            firstCard.open = true;
+          }
+
+        }, err => {
+          showToast("⚠️ Gagal deteksi lokasi. Pastikan izin lokasi aktif.");
+          findBtn.classList.remove('loading');
+          findBtn.textContent = '📍 Temukan Charger Terdekat';
+          findBtn.disabled = false;
+        }, {maximumAge:600000, timeout:10000});
+      }
+      
+      // Welcome functions
+      function showWelcomeIfFirst(){
+        if(!welcomeOverlay) return;
+        try {
+          const shown = localStorage.getItem('mlu_welcome_shown_v1');
+          if(!shown){
+            welcomeOverlay.style.display = 'flex';
+          }
+        } catch(e){ /* ignore storage errors */ }
+      }
+      function hideWelcome(){
+        if(!welcomeOverlay) return;
+        welcomeOverlay.style.display = 'none';
+        try { localStorage.setItem('mlu_welcome_shown_v1','1'); } catch(e){}
+      }
+
+      // =======================================
+      // PASANG SEMUA LISTENER
+      // =======================================
+      
+      // --- Listener Fitur yang Hilang (diberi pengaman 'if') ---
+      if(searchBox) searchBox.addEventListener('input', updateDisplay);
+      if(toTopBtn) {
+        window.onscroll = () => {
+          if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            toTopBtn.style.display = "block";
+          } else {
+            toTopBtn.style.display = "none";
+          }
+        };
+        toTopBtn.addEventListener('click', () => {
+          window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+      }
+      if(listContainer) {
+        listContainer.addEventListener('click', (e) => {
+          if (e.target.tagName === 'SUMMARY') {
+            const currentDetail = e.target.parentElement;
+            const isOpening = !currentDetail.open;
+            const allDetails = listContainer.querySelectorAll('details');
+            allDetails.forEach(detail => {
+              if (detail !== currentDetail) {
+                detail.open = false;
+              }
+            });
+            currentDetail.open = isOpening;
+          }
+        });
+      }
+
+      // --- Listener Lama ---
+      if(findBtn) findBtn.addEventListener('click', findAndSortCards);
+      if(helpBtn) helpBtn.addEventListener('click', ()=>{
+        if (helpPanel) {
+          helpPanel.style.right = helpPanel.style.right === '0px' ? '-320px' : '0px';
+          helpPanel.setAttribute('aria-hidden', helpPanel.style.right === '0px');
+        }
+      });
+      if(closeHelp) closeHelp.addEventListener('click', ()=> { 
+        if (helpPanel) {
+          helpPanel.style.right = '-320px'; 
+          helpPanel.setAttribute('aria-hidden', 'true');
+        }
+      });
+      if(welcomeFind) welcomeFind.addEventListener('click', ()=>{
+        hideWelcome();
+        findAndSortCards();
+      });
+      if(welcomeSOS) welcomeSOS.addEventListener('click', ()=>{
+        hideWelcome();
+        if (helpPanel) {
+          helpPanel.style.right = '0px';
+          helpPanel.setAttribute('aria-hidden', 'false');
+        }
+      });
+      document.addEventListener('keydown', e=>{
+        if(e.key === 'Escape'){
+          if(welcomeOverlay && welcomeOverlay.style.display === 'flex'){ hideWelcome(); }
+          if(helpPanel && helpPanel.style.right === '0px'){ 
+            helpPanel.style.right = '-320px'; 
+            helpPanel.setAttribute('aria-hidden', 'true');
+          }
+        }
+      });
+
+      // 4. Jalankan kode inisialisasi
+      updateDisplay();
+      showWelcomeIfFirst();
+      updateVisitCounter(countEl);
+    });
+
+  </script>
+</body>
+</html>
